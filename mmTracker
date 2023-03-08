@@ -1,0 +1,16 @@
+import tkinter as tk
+
+# Create a tkinter window
+root = tk.Tk()
+root.geometry("320x240")
+root.configure(background='black')
+
+# Load image for the pause screen background
+background_image = tk.PhotoImage(file="pause_screen_background.png")
+
+# Create a label for the background image
+background_label = tk.Label(root, image=background_image)
+background_label.place(x=0, y=0)
+
+# Start the main event loop
+root.mainloop()

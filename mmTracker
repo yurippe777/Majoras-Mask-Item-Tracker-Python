@@ -1,16 +1,49 @@
+import os
+from PIL import Image, ImageTk
 import tkinter as tk
 
-# Create a tkinter window
+# Load the 32x32 mask images
+mask_images = []
+for i in range(24):
+    filename = os.path.join("ICONS", f"mask_{i+1}.png")
+    mask_image = Image.open(filename).convert("RGBA")
+    mask_images.append(mask_image)
+
+# Load the background image
+bg_image = Image.open("pause_screen.png")
+
+# Create a new image for the pause screen element
+pause_screen_width = 240
+pause_screen_height = 160
+pause_screen = Image.new("RGBA", (pause_screen_width, pause_screen_height), (0, 0, 0, 0))
+
+# Paste the mask images onto the pause screen element
+mask_width = 32
+mask_height = 32
+x_offset = (pause_screen_width - (6 * mask_width)) // 2
+y_offset = ((pause_screen_height - (4 * mask_height)) // 2) + 10  # shift down by 10 pixels
+for i, mask_image in enumerate(mask_images):
+    pause_screen.paste(mask_image, (x_offset, y_offset))
+    x_offset += mask_width
+    if (i+1) % 6 == 0:
+        x_offset = (pause_screen_width - (6 * mask_width)) // 2
+        y_offset += mask_height
+        y_offset = min(y_offset, pause_screen_height - mask_height)  # adjust for last row
+
+    x_offset = min(x_offset, pause_screen_width - mask_width)  # adjust for last column
+
+# Combine the pause screen element and the background image
+combined_image = bg_image.copy()
+combined_image.alpha_composite(pause_screen)
+
+# Create a window and display the combined image
 root = tk.Tk()
-root.geometry("320x240")
-root.configure(background='black')
+root.title("Majora's Mask")
+root.geometry(f"{combined_image.width}x{combined_image.height}")
 
-# Load image for the pause screen background
-background_image = tk.PhotoImage(file="pause_screen_background.png")
+# Convert the image to a PhotoImage object and display it in a label
+img = ImageTk.PhotoImage(combined_image)
+label = tk.Label(root, image=img)
+label.pack()
 
-# Create a label for the background image
-background_label = tk.Label(root, image=background_image)
-background_label.place(x=0, y=0)
-
-# Start the main event loop
 root.mainloop()

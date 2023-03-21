@@ -78,22 +78,27 @@ def toggle_mask(button):
     button.configure(image=new_image)
     button.image = new_image
 
-    # Update the mask_names list with the new filename
+    # Update the mask_names and mask_statuses lists with the new filename and status
     mask_names[button_index] = new_name
+    mask_statuses[button_index] = status
 
     # Save the status of each button to a text file
     with open("mask_statuses.txt", "w") as f:
-        for name in mask_names:
-            if "bw" in name:
-                f.write("0\n")
-            else:
-                f.write("1\n")
+        for status in mask_statuses:
+            f.write(status + "\n")
+
 
 # Add the mask buttons to the pause screen element
 mask_buttons = []
+with open("mask_statuses.txt", "r") as f:
+    mask_statuses = f.read().splitlines()
+
 for i, mask_image in enumerate(mask_images):
     # Create the button and add it to the list of buttons
-    button_image = ImageTk.PhotoImage(mask_image)
+    if mask_statuses[i] == "0":
+        button_image = ImageTk.PhotoImage(bw_mask_images[i])
+    else:
+        button_image = ImageTk.PhotoImage(mask_image)
     button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
     button.image = button_image
     mask_buttons.append(button)

@@ -11,6 +11,13 @@ for i in range(24):
     mask_images.append(mask_image)
     mask_names.append(filename)
 
+# Load the black and white versions of the mask images
+bw_mask_images = []
+for i in range(24):
+    filename = os.path.join("ICONS", f"mask_{i+1}bw.png")
+    bw_mask_image = Image.open(filename).convert("RGBA")
+    bw_mask_images.append(bw_mask_image)
+
 # Load the background image
 bg_image = Image.open("pause_screen.png")
 
@@ -18,6 +25,7 @@ bg_image = Image.open("pause_screen.png")
 pause_screen_width = 240
 pause_screen_height = 160
 pause_screen = Image.new("RGBA", (pause_screen_width, pause_screen_height), (0, 0, 0, 0))
+
 # Combine the pause screen element and the background image
 combined_image = bg_image.copy()
 combined_image.alpha_composite(pause_screen)
@@ -46,16 +54,47 @@ mask_width = 32
 mask_height = 32
 x_offset = (pause_screen_width - (6 * mask_width)) // 2
 y_offset = ((pause_screen_height - (4 * mask_height)) // 2) + 10  # shift down by 10 pixels
-for i, mask_image in enumerate(mask_images):
-    button_image = ImageTk.PhotoImage(mask_image)
-    button = tk.Button(pause_screen_frame, image=button_image, command=lambda name=mask_names[i]: print(name),bg='#555555')
-    button.image = button_image
-    button.place(x=x_offset, y=y_offset)
-    x_offset += mask_width
-    if (i+1) % 6 == 0:
-        x_offset = (pause_screen_width - (6 * mask_width)) // 2
-        y_offset += mask_height
-        y_offset = min(y_offset, pause_screen_height - mask_height)  # adjust for last row
-    x_offset = min(x_offset, pause_screen_width - mask_width)  # adjust for last column
 
+mask_buttons = []
+# Create a function to toggle between the colored and black-and-white versions of the masks
+def toggle_mask(button):
+    # Get the index of the button that was clicked
+    button_index = mask_buttons.index(button)
+
+    # Get the current image on the button
+    current_image = button.image
+    current_name = mask_names[button_index]
+
+    # Determine the new image to display
+    if "bw" in current_name:
+        new_name = current_name.replace("bw.png", ".png")
+    else:
+        new_name = current_name.replace(".png", "bw.png")
+
+    # Load the new image and update the button image
+    new_image = ImageTk.PhotoImage(Image.open(new_name))
+    button.configure(image=new_image)
+    button.image = new_image
+
+    # Update the mask_names list with the new filename
+    mask_names[button_index] = new_name
+
+# Add the mask buttons to the pause screen element
+mask_buttons = []
+for i, mask_image in enumerate(mask_images):
+    # Create the button and add it to the list of buttons
+    button_image = ImageTk.PhotoImage(mask_image)
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button.image = button_image
+    mask_buttons.append(button)
+
+    # Set the position of the button as a proportion of the window size
+    x = x_offset + ((i % 6) * mask_width)
+    y = y_offset + ((i // 6) * mask_height)
+    button.place(x=x, y=y)
+
+    # Bind the toggle_mask function to the button
+    button.configure(command=lambda b=button: toggle_mask(b))
+
+# Start the main event loop
 root.mainloop()

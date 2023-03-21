@@ -68,8 +68,10 @@ def toggle_mask(button):
     # Determine the new image to display
     if "bw" in current_name:
         new_name = current_name.replace("bw.png", ".png")
+        status = "1"
     else:
         new_name = current_name.replace(".png", "bw.png")
+        status = "0"
 
     # Load the new image and update the button image
     new_image = ImageTk.PhotoImage(Image.open(new_name))
@@ -78,6 +80,14 @@ def toggle_mask(button):
 
     # Update the mask_names list with the new filename
     mask_names[button_index] = new_name
+
+    # Save the status of each button to a text file
+    with open("mask_statuses.txt", "w") as f:
+        for name in mask_names:
+            if "bw" in name:
+                f.write("0\n")
+            else:
+                f.write("1\n")
 
 # Add the mask buttons to the pause screen element
 mask_buttons = []

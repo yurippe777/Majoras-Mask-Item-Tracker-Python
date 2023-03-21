@@ -111,5 +111,9 @@ for i, mask_image in enumerate(mask_images):
     # Bind the toggle_mask function to the button
     button.configure(command=lambda b=button: toggle_mask(b))
 
+    # Simulate a click on the button to toggle the image if it's black and white
+    if mask_statuses[i] == "0":
+        button.invoke()
+
 # Start the main event loop
 root.mainloop()

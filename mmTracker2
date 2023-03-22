@@ -20,15 +20,22 @@ for i in range(24):
 
 # Load the background image
 bg_image = Image.open("pause_screen.png")
-
+# Load the second background image
+bg_image2 = Image.open("pause_screen2.png")
 # Create a new image for the pause screen element
 pause_screen_width = 240
 pause_screen_height = 160
 pause_screen = Image.new("RGBA", (pause_screen_width, pause_screen_height), (0, 0, 0, 0))
+# Create a new image that is twice the height of the original pause screen image
+combined_height = pause_screen_height * 2 + 21
+combined_width = pause_screen_width
+combined_image = Image.new("RGBA", (combined_width, combined_height), (0, 0, 0, 0))
 
-# Combine the pause screen element and the background image
-combined_image = bg_image.copy()
-combined_image.alpha_composite(pause_screen)
+# Paste the first background image at the top of the combined image
+combined_image.paste(bg_image, (0, 0))
+
+# Paste the second background image below the first image
+combined_image.paste(bg_image2, (0, pause_screen_height + 10))
 
 # Create a window and display the combined image
 root = tk.Tk()
@@ -123,4 +130,3 @@ for i, mask_image in enumerate(mask_images):
 # Start the main event loop
 winsound.PlaySound("SOUNDS/Startup.wav", winsound.SND_ASYNC)
 root.mainloop()
-

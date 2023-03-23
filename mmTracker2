@@ -4,7 +4,9 @@ import tkinter as tk
 import winsound
 # Load the 32x32 mask images
 mask_images = []
+item_images = []
 mask_names = []
+item_names = []
 for i in range(24):
     filename = os.path.join("ICONS", f"mask_{i+1}.png")
     mask_image = Image.open(filename).convert("RGBA")
@@ -13,11 +15,20 @@ for i in range(24):
 
 # Load the black and white versions of the mask images
 bw_mask_images = []
+bw_item_images = []
 for i in range(24):
     filename = os.path.join("ICONS", f"mask_{i+1}bw.png")
     bw_mask_image = Image.open(filename).convert("RGBA")
     bw_mask_images.append(bw_mask_image)
-
+for i in range(24):
+    filename = os.path.join("ICONS2", f"item_{i+1}.png")
+    item_image = Image.open(filename).convert("RGBA")
+    item_images.append(item_image)
+    item_names.append(filename)
+for i in range (24):
+    filename = os.path.join("ICONS2", f"item_{i+1}bw.png")
+    bw_item_image = Image.open(filename).convert("RGBA")
+    bw_item_images.append(bw_item_image)
 # Load the background image
 bg_image = Image.open("pause_screen.png")
 # Load the second background image
@@ -63,6 +74,7 @@ x_offset = (pause_screen_width - (6 * mask_width)) // 2
 y_offset = ((pause_screen_height - (4 * mask_height)) // 2) + 10  # shift down by 10 pixels
 
 mask_buttons = []
+item_buttons = []
 # Create a function to toggle between the colored and black-and-white versions of the masks
 # Create a function to toggle between the colored and black-and-white versions of the masks
 def toggle_mask(button):
@@ -99,9 +111,43 @@ def toggle_mask(button):
 
     # Play the appropriate sound
     winsound.PlaySound(sound_file, winsound.SND_ASYNC)
+def toggle_item(button):
+    # Get the index of the button that was clicked
+    button_index = item_buttons.index(button)
 
+    # Get the current image on the button
+    current_image = button.image
+    current_name = item_names[button_index]
+
+    # Determine the new image to display
+    if "bw" in current_name:
+        new_name = current_name.replace("bw.png", ".png")
+        status = "1"
+        sound_file = "SOUNDS/Select.wav"
+    else:
+        new_name = current_name.replace(".png", "bw.png")
+        status = "0"
+        sound_file = "SOUNDS/Deselect.wav"
+
+    # Load the new image and update the button image
+    new_image = ImageTk.PhotoImage(Image.open(new_name))
+    button.configure(image=new_image)
+    button.image = new_image
+
+    # Update the mask_names and mask_statuses lists with the new filename and status
+    item_names[button_index] = new_name
+    item_statuses[button_index] = status
+
+    # Save the status of each button to a text file
+    with open("item_statuses.txt", "w") as f:
+        for status in item_statuses:
+            f.write(status + "\n")
+
+    # Play the appropriate sound
+    winsound.PlaySound(sound_file, winsound.SND_ASYNC)
 # Add the mask buttons to the pause screen element
 mask_buttons = []
+item_buttons = []
 with open("mask_statuses.txt", "r") as f:
     mask_statuses = f.read().splitlines()
 
@@ -125,6 +171,33 @@ for i, mask_image in enumerate(mask_images):
 
     # Simulate a click on the button to toggle the image if it's black and white
     if mask_statuses[i] == "0":
+        button.invoke()
+
+
+
+###################################################################################
+with open("item_statuses.txt", "r") as f:
+    item_statuses = f.read().splitlines()
+
+for i, item_image in enumerate(item_images):
+    # Create the button and add it to the list of buttons
+    if item_statuses[i] == "0":
+        button_image = ImageTk.PhotoImage(bw_item_images[i])
+    else:
+        button_image = ImageTk.PhotoImage(item_image)
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button.image = button_image
+    item_buttons.append(button)
+
+    # Set the position of the button as a proportion of the window size
+    x = x_offset + ((i % 6) * mask_width)
+    y = y_offset + ((i // 6) * mask_height) + 170
+    button.place(x=x, y=y)
+    # Bind the toggle_item function to the button
+    button.configure(command=lambda b=button: toggle_item(b))
+
+    # Simulate a click on the button to toggle the image if it's black and white
+    if item_statuses[i] == "0":
         button.invoke()
 
 # Start the main event loop

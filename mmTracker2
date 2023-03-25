@@ -16,6 +16,8 @@ for i in range(24):
 # Load the black and white versions of the mask images
 bw_mask_images = []
 bw_item_images = []
+item_2x = Image.open("ICONS2/item_2x.png").convert("RGBA")
+item_2y = Image.open("ICONS2/item_2y.png").convert("RGBA")
 for i in range(24):
     filename = os.path.join("ICONS", f"mask_{i+1}bw.png")
     bw_mask_image = Image.open(filename).convert("RGBA")
@@ -120,14 +122,36 @@ def toggle_item(button):
     current_name = item_names[button_index]
 
     # Determine the new image to display
-    if "bw" in current_name:
-        new_name = current_name.replace("bw.png", ".png")
-        status = "1"
-        sound_file = "SOUNDS/Select.wav"
-    else:
-        new_name = current_name.replace(".png", "bw.png")
-        status = "0"
-        sound_file = "SOUNDS/Deselect.wav"
+    if current_name != "item_2.png" or "item_2x.png" or "item_2y.png" or "item_2bw.png":
+        if "bw" in current_name:
+            new_name = current_name.replace("bw.png", ".png")
+            status = "1"
+            sound_file = "SOUNDS/Select.wav"
+        else:
+            new_name = current_name.replace(".png", "bw.png")
+            status = "0"
+            sound_file = "SOUNDS/Deselect.wav"
+    if button_index == 1:
+        if "bw" in current_name:
+            new_name = current_name.replace("bw.png", ".png")
+            status = "1"
+            sound_file = "SOUNDS/Select.wav"
+            print("1")
+        elif "x" in current_name:
+            new_name = current_name.replace("x.png", "y.png")
+            status = "3"
+            sound_file = "SOUNDS/Select.wav"
+            print("3")
+        elif "y" in current_name:
+            new_name = current_name.replace("y.png", "bw.png")
+            status = "0"
+            sound_file = "SOUNDS/Select.wav"
+            print("0")
+        else:
+            new_name = current_name.replace(".png", "x.png")
+            status = "2"
+            sound_file = "SOUNDS/Deselect.wav"
+            print("2")
 
     # Load the new image and update the button image
     new_image = ImageTk.PhotoImage(Image.open(new_name))
@@ -137,7 +161,6 @@ def toggle_item(button):
     # Update the mask_names and mask_statuses lists with the new filename and status
     item_names[button_index] = new_name
     item_statuses[button_index] = status
-
     # Save the status of each button to a text file
     with open("item_statuses.txt", "w") as f:
         for status in item_statuses:
@@ -193,12 +216,27 @@ for i, item_image in enumerate(item_images):
     x = x_offset + ((i % 6) * mask_width)
     y = y_offset + ((i // 6) * mask_height) + 170
     button.place(x=x, y=y)
+
     # Bind the toggle_item function to the button
     button.configure(command=lambda b=button: toggle_item(b))
 
     # Simulate a click on the button to toggle the image if it's black and white
-    if item_statuses[i] == "0":
-        button.invoke()
+    if i != 1:
+        if item_statuses[i] == "0":
+            button.invoke()
+    if i == 1:
+        if item_statuses[i] == "0":
+            for _ in range(3):
+                button.invoke()
+        if item_statuses[i] == "1":
+            for _ in range(4):
+                button.invoke()
+        if item_statuses[i] == "2":
+            for _ in range(1):
+                button.invoke()
+        if item_statuses[i] == "3":
+            for _ in range(2):
+                button.invoke()
 
 # Start the main event loop
 winsound.PlaySound("SOUNDS/Startup.wav", winsound.SND_ASYNC)

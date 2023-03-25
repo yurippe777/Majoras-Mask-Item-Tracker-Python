@@ -5,8 +5,10 @@ import winsound
 # Load the 32x32 mask images
 mask_images = []
 item_images = []
+misc_images = []
 mask_names = []
 item_names = []
+misc_names = []
 for i in range(24):
     filename = os.path.join("ICONS", f"mask_{i+1}.png")
     mask_image = Image.open(filename).convert("RGBA")
@@ -16,6 +18,7 @@ for i in range(24):
 # Load the black and white versions of the mask images
 bw_mask_images = []
 bw_item_images = []
+bw_misc_images = []
 for i in range(24):
     filename = os.path.join("ICONS", f"mask_{i+1}bw.png")
     bw_mask_image = Image.open(filename).convert("RGBA")
@@ -29,6 +32,11 @@ for i in range (24):
     filename = os.path.join("ICONS2", f"item_{i+1}bw.png")
     bw_item_image = Image.open(filename).convert("RGBA")
     bw_item_images.append(bw_item_image)
+for i in range (20):
+    filename = os.path.join("ICONS3", f"misc_{i+1}.png")
+    misc_image = Image.open(filename).convert("RGBA")
+    misc_images.append(misc_image)
+    misc_names.append(filename)
 # Load the background image
 bg_image = Image.open("pause_screen.png")
 # Load the second background image
@@ -137,22 +145,18 @@ def toggle_item(button):
             new_name = current_name.replace("bw.png", ".png")
             status = "1"
             sound_file = "SOUNDS/Select.wav"
-            print("1")
         elif "x" in current_name:
             new_name = current_name.replace("x.png", "y.png")
             status = "3"
             sound_file = "SOUNDS/Select.wav"
-            print("3")
         elif "y" in current_name:
             new_name = current_name.replace("y.png", "bw.png")
             status = "0"
             sound_file = "SOUNDS/Select.wav"
-            print("0")
         else:
             new_name = current_name.replace(".png", "x.png")
             status = "2"
             sound_file = "SOUNDS/Deselect.wav"
-            print("2")
 
     # Load the new image and update the button image
     new_image = ImageTk.PhotoImage(Image.open(new_name))

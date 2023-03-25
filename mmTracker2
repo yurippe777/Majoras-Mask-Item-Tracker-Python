@@ -16,8 +16,6 @@ for i in range(24):
 # Load the black and white versions of the mask images
 bw_mask_images = []
 bw_item_images = []
-item_2x = Image.open("ICONS2/item_2x.png").convert("RGBA")
-item_2y = Image.open("ICONS2/item_2y.png").convert("RGBA")
 for i in range(24):
     filename = os.path.join("ICONS", f"mask_{i+1}bw.png")
     bw_mask_image = Image.open(filename).convert("RGBA")
@@ -122,7 +120,7 @@ def toggle_item(button):
     current_name = item_names[button_index]
 
     # Determine the new image to display
-    if current_name != "item_2.png" or "item_2x.png" or "item_2y.png" or "item_2bw.png":
+    if current_name != "item_2.png" or "item_2x.png" or "item_2y.png" or "item_2bw.png" or "item_7.png" or "item_7x.png" or "item_7y.png" or "item_7bw.png":
         if "bw" in current_name:
             new_name = current_name.replace("bw.png", ".png")
             status = "1"
@@ -131,7 +129,7 @@ def toggle_item(button):
             new_name = current_name.replace(".png", "bw.png")
             status = "0"
             sound_file = "SOUNDS/Deselect.wav"
-    if button_index == 1:
+    if button_index == 1 or button_index == 6:
         if "bw" in current_name:
             new_name = current_name.replace("bw.png", ".png")
             status = "1"
@@ -221,10 +219,10 @@ for i, item_image in enumerate(item_images):
     button.configure(command=lambda b=button: toggle_item(b))
 
     # Simulate a click on the button to toggle the image if it's black and white
-    if i != 1:
+    if i != 6 and i !=1:
         if item_statuses[i] == "0":
             button.invoke()
-    if i == 1:
+    if i == 1 or i == 6:
         if item_statuses[i] == "0":
             for _ in range(3):
                 button.invoke()

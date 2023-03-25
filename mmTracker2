@@ -86,6 +86,9 @@ y_offset = ((pause_screen_height - (4 * mask_height)) // 2) + 10  # shift down b
 
 mask_buttons = []
 item_buttons = []
+misc_buttons = []
+with open("misc_statuses.txt", "r") as f:
+    misc_statuses = f.read().splitlines()
 # Create a function to toggle between the colored and black-and-white versions of the masks
 # Create a function to toggle between the colored and black-and-white versions of the masks
 def toggle_mask(button):
@@ -173,9 +176,44 @@ def toggle_item(button):
 
     # Play the appropriate sound
     winsound.PlaySound(sound_file, winsound.SND_ASYNC)
+def toggle_misc(button):
+    # Get the index of the button that was clicked
+    button_index = misc_buttons.index(button)
+
+    # Get the current image on the button
+    current_image = button.image
+    current_name = misc_names[button_index]
+
+    # Determine the new image to display
+    if "bw" in current_name:
+        new_name = current_name.replace("bw.png", ".png")
+        status = "1"
+        sound_file = "SOUNDS/Select.wav"
+    else:
+        new_name = current_name.replace(".png", "bw.png")
+        status = "0"
+        sound_file = "SOUNDS/Deselect.wav"
+
+    # Load the new image and update the button image
+    new_image = ImageTk.PhotoImage(Image.open(new_name))
+    button.configure(image=new_image)
+    button.image = new_image
+
+    # Update the misc_names and misc_statuses lists with the new filename and status
+    misc_names[button_index] = new_name
+    misc_statuses[button_index] = status
+
+    # Save the status of each button to a text file
+    with open("misc_statuses.txt", "w") as f:
+        for status in misc_statuses:
+            f.write(status + "\n")
+
+    # Play the appropriate sound
+    winsound.PlaySound(sound_file, winsound.SND_ASYNC)
 # Add the mask buttons to the pause screen element
 mask_buttons = []
 item_buttons = []
+misc_buttons = []
 with open("mask_statuses.txt", "r") as f:
     mask_statuses = f.read().splitlines()
 
@@ -203,7 +241,7 @@ for i, mask_image in enumerate(mask_images):
 
 
 
-###################################################################################
+#########################################################################################################################
 with open("item_statuses.txt", "r") as f:
     item_statuses = f.read().splitlines()
 
@@ -242,7 +280,111 @@ for i, item_image in enumerate(item_images):
         if item_statuses[i] == "3":
             for _ in range(2):
                 button.invoke()
+#########################################################################################################################
+with open("misc_statuses.txt", "r") as f:
+    misc_statuses = f.read().splitlines()
+for i, misc_image in enumerate(misc_images):
+    # Create the button and add it to the list of buttons
+   # if misc_statuses[i] == "0":
+    #    button_image = ImageTk.PhotoImage(bw_misc_images[i])
+    #else:
+    button_image = ImageTk.PhotoImage(misc_image)
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button.image = button_image
+    misc_buttons.append(button)
 
+    # Set the position of the button as a proportion of the window size
+    if i != 0:
+        x = x_offset + ((i % 6) * mask_width) + 500
+        y = y_offset + ((i // 6) * mask_height)
+        button.place(x=x, y=y)
+    if i == 0:
+        x = x_offset + ((i % 6) * mask_width) + 220
+        y = y_offset + ((i // 6) * mask_height) -20
+        button.place(x=x, y=y)
+    if i == 1:
+        x = x_offset + ((i % 6) * mask_width) + 346
+        y = y_offset + ((i // 6) * mask_height) - 4
+        button.place(x=x, y=y)
+
+    if i == 2:
+        x = x_offset + ((i % 6) * mask_width) + 277
+        y = y_offset + ((i // 6) * mask_height) + 15
+        button.place(x=x, y=y)
+    if i == 3:
+        x = x_offset + ((i % 6) * mask_width) + 320
+        y = y_offset + ((i // 6) * mask_height) + 15
+        button.place(x=x, y=y)
+    if i == 4:
+        x = x_offset + ((i % 6) * mask_width) + 250
+        y = y_offset + ((i // 6) * mask_height) + 35
+        button.place(x=x, y=y)
+    if i == 5:
+        x = 280
+        y = 6
+        button.place(x=x, y=y)
+    if i == 6:
+        x = 243
+        y = 44
+        button.place(x=x, y=y)
+    if i == 7:
+        x = 280
+        y = 44
+        button.place(x=x, y=y)
+    if i == 8:
+        x = 317
+        y = 44
+        button.place(x=x, y=y)
+    if i == 9:
+        x = 243
+        y = 81
+        button.place(x=x, y=y)
+    if i == 10:
+        x = 280
+        y = 81
+        button.place(x=x, y=y)
+    if i == 11:
+        x = 317
+        y = 81
+        button.place(x=x, y=y)
+    if i == 12:
+        x = 243
+        y = 118
+        button.place(x=x, y=y)
+    if i == 13:
+        x = 280
+        y = 118
+        button.place(x=x, y=y)
+    if i == 14:
+        x = 317
+        y = 118
+        button.place(x=x, y=y)
+    if i == 15:
+        x = 364
+        y = 90
+        button.place(x=x, y=y)
+    if i == 16:
+        x = 440
+        y = 90
+        button.place(x=x, y=y)
+    if i == 17:
+        x = 364
+        y = 128
+        button.place(x=x, y=y)
+    if i == 18:
+        x = 317
+        y = 6
+        button.place(x=x, y=y)
+    if i == 19:
+        x = 440
+        y = 128
+        button.place(x=x, y=y)
+    # Bind the toggle_misc function to the button
+    button.configure(command=lambda b=button: toggle_misc(b))
+
+    # Simulate a click on the button to toggle the image if it's black and white
+    if misc_statuses[i] == "0":
+        button.invoke()
 # Start the main event loop
 winsound.PlaySound("SOUNDS/Startup.wav", winsound.SND_ASYNC)
 root.mainloop()

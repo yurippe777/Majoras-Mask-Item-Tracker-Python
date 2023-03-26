@@ -37,6 +37,10 @@ for i in range (20):
     misc_image = Image.open(filename).convert("RGBA")
     misc_images.append(misc_image)
     misc_names.append(filename)
+for i in range(19):
+    filename = os.path.join("ICONS3",f"misc_{i+1}bw.png")
+    bw_misc_image = Image.open(filename).convert("RGBA")
+    bw_misc_images.append(bw_misc_image)
 # Load the background image
 bg_image = Image.open("pause_screen.png")
 # Load the second background image
@@ -188,6 +192,26 @@ def toggle_misc(button):
     if "bw" in current_name:
         new_name = current_name.replace("bw.png", ".png")
         status = "1"
+        sound_file = "SOUNDS/Select.wav"
+    elif button_index == 19:
+        new_name = current_name
+        status = "1"
+        sound_file = "SOUNDS/Select.wav"
+    elif (button_index == 15 or button_index == 16 or button_index == 17) and "bw" not in current_name and "x" not in current_name and "y" not in current_name and "z" not in current_name:
+        new_name = current_name.replace(".png","x.png")
+        status = "2"
+        sound_file = "SOUNDS/Select.wav"
+    elif (button_index == 15) and "x" in current_name:
+        new_name = current_name.replace("x.png","y.png")
+        status = "3"
+        sound_file = "SOUNDS/Select.wav"
+    elif (button_index ==16 or button_index ==17) and "x" in current_name:
+        new_name = current_name.replace("x.png","bw.png")
+        status = "0"
+        sound_file = "SOUNDS/Select.wav"
+    elif (button_index == 15) and "y" in current_name:
+        new_name = current_name.replace("y.png","bw.png")
+        status = "0"
         sound_file = "SOUNDS/Select.wav"
     else:
         new_name = current_name.replace(".png", "bw.png")
@@ -383,8 +407,25 @@ for i, misc_image in enumerate(misc_images):
     button.configure(command=lambda b=button: toggle_misc(b))
 
     # Simulate a click on the button to toggle the image if it's black and white
-    if misc_statuses[i] == "0":
-        button.invoke()
+    if i != 15 and i !=16 and i!= 17:
+        if misc_statuses[i] == "0":
+            button.invoke()
+    if i == 15 or i ==16 or i ==17:
+        if misc_statuses[i] == "0" and i !=16 and i !=17:
+            for _ in range(3):
+                button.invoke()
+        if misc_statuses[i] == "0" and (i ==16 or i==17):
+            for _ in range(1):
+                button.invoke()
+        if misc_statuses[i] == "1" and (i != 16 and i!=17):
+            for _ in range(4):
+                button.invoke()
+        if misc_statuses[i] == "2":
+            for _ in range(1):
+                button.invoke()
+        if misc_statuses[i] == "3":
+            for _ in range(2):
+                button.invoke()
 # Start the main event loop
 winsound.PlaySound("SOUNDS/Startup.wav", winsound.SND_ASYNC)
 root.mainloop()

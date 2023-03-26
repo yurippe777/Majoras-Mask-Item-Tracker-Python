@@ -3,5 +3,7 @@ Tracks items obtainable in Majora's Mask, and includes features such as sounds, 
 
 **Please read:**
 
-mmTracker just contains the Python code to read the program. It needs the image and text files available in the correct locations to run. 
-The attatched .zip file contains all the files needed to run the program from Python, or you can just use the .exe file included.
+mmTracker just contains the Python code to read the program. It contains several dependancies and cannot run on its own.
+Check Releases for an easy to use .zip file which contains all the necessary dependancies.
+
+If you would like to run the program from Python, all the dependancies will be included here as well.

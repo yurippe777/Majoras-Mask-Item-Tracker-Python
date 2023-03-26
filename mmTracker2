@@ -2,6 +2,42 @@ import os
 from PIL import Image, ImageTk
 import tkinter as tk
 import winsound
+from idlelib.tooltip import Hovertip
+from tkinter import messagebox
+import sys
+
+def reset_function():
+    # ... code to save the game ...
+
+    # Prompt user to confirm save
+    confirmed = messagebox.askyesno("Confirmation", "Are you sure you want to reset the game?")
+    if not confirmed:
+        return
+    else:
+        with open("misc_statuses.txt", "w") as f:
+            # Write 28 lines with the number 0
+            for i in range(19):
+                f.write("0\n")
+            f.write("1\n")
+            for i in range (21,29):
+                f.write("0\n")
+            f.write("1\n")
+        with open("mask_statuses.txt", "w") as f:
+            # Write 24 lines with the number 0
+            for i in range(24):
+                f.write("0\n")
+        with open("item_statuses.txt", "w") as f:
+            # Write 24 lines with the number 0
+            for i in range(24):
+                f.write("0\n")
+
+
+        python = sys.executable
+        os.execl(python, python, *sys.argv)
+        return
+
+# User clicked "yes", so save the game
+# ... code to save the game ...
 # Load the 32x32 mask images
 mask_images = []
 item_images = []
@@ -32,7 +68,7 @@ for i in range (24):
     filename = os.path.join("ICONS2", f"item_{i+1}bw.png")
     bw_item_image = Image.open(filename).convert("RGBA")
     bw_item_images.append(bw_item_image)
-for i in range (28):
+for i in range (29):
     filename = os.path.join("ICONS3", f"misc_{i+1}.png")
     misc_image = Image.open(filename).convert("RGBA")
     misc_images.append(misc_image)
@@ -233,9 +269,14 @@ def toggle_misc(button):
         sound_file = "SOUNDS/Deselect.wav"
 
     # Load the new image and update the button image
-    new_image = ImageTk.PhotoImage(Image.open(new_name))
-    button.configure(image=new_image)
-    button.image = new_image
+    if button_index != 28:
+        new_image = ImageTk.PhotoImage(Image.open(new_name))
+        button.configure(image=new_image)
+        button.image = new_image
+    else:
+        new_name = current_name
+        status = "1"
+        reset_function()
 
     # Update the misc_names and misc_statuses lists with the new filename and status
     misc_names[button_index] = new_name
@@ -261,7 +302,37 @@ for i, mask_image in enumerate(mask_images):
         button_image = ImageTk.PhotoImage(bw_mask_images[i])
     else:
         button_image = ImageTk.PhotoImage(mask_image)
-    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555', text = "?")
+    button.pack(pady=30)
+    mask_dict = {
+        0: "Postman's Hat",
+        1: "All-Night Mask",
+        2: "Blast Mask",
+        3: "Stone Mask",
+        4: "Great Fairy's Mask",
+        5: "Deku Mask",
+        6: "Keaton Mask",
+        7: "Bremen Mask",
+        8: "Bunny Hood",
+        9: "Don Gero's Mask",
+        10: "Mask of Scents",
+        11: "Goron Mask",
+        12: "Romani's Mask",
+        13: "Circus Leader's Mask",
+        14: "Kafei's Mask",
+        15: "Couple's Mask",
+        16: "Mask of Truth",
+        17: "Zora Mask",
+        18: "Kamaro's Mask",
+        19: "Gibdo Mask",
+        20: "Garo's Mask",
+        21: "Captain's Hat",
+        22: "Giant's Mask",
+        23: "Fierce Deity's Mask",
+    }
+
+    myTip = Hovertip(button, mask_dict.get(i, ":3"))
+
     button.image = button_image
     mask_buttons.append(button)
 
@@ -289,7 +360,8 @@ for i, item_image in enumerate(item_images):
         button_image = ImageTk.PhotoImage(bw_item_images[i])
     else:
         button_image = ImageTk.PhotoImage(item_image)
-    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555', text = "?")
+    button.pack(pady=30)
     button.image = button_image
     item_buttons.append(button)
 
@@ -318,6 +390,34 @@ for i, item_image in enumerate(item_images):
         if item_statuses[i] == "3":
             for _ in range(2):
                 button.invoke()
+    mask_dict = {
+        0: "Ocarina of Time",
+        1: "Hero's Bow" ,
+        2: "Fire Arrow",
+        3: "Ice Arrow",
+        4: "Light Arrow",
+        5: "Moon's Tear",
+        6: "Bomb Bag",
+        7: "Bombchu",
+        8: "Deku Stick",
+        9: "Deku Nut",
+        10: "Magic Bean",
+        11: "Room Key",
+        12: "Powder Keg",
+        13: "Pictograph Box",
+        14: "Lens of Truth",
+        15: "Hookshot",
+        16: "Great Fairy's Sword",
+        17: "Letter to Kafei",
+        18: "Bottle #1",
+        19: "Bottle #2",
+        20: "Bottle #3",
+        21: "Bottle #4",
+        22: "Bottle #5",
+        23: "Bottle #6",
+    }
+
+    myTip = Hovertip(button, mask_dict.get(i, ":3"))
 #########################################################################################################################
 with open("misc_statuses.txt", "r") as f:
     misc_statuses = f.read().splitlines()
@@ -327,7 +427,41 @@ for i, misc_image in enumerate(misc_images):
     #    button_image = ImageTk.PhotoImage(bw_misc_images[i])
     #else:
     button_image = ImageTk.PhotoImage(misc_image)
-    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555', text = "?")
+    button.pack(pady=30)
+    mask_dict = {
+        0: "Bombers' Notebook",
+        1: "Odolwa's Remains" ,
+        2: "Gyorg's Remains",
+        3: "Goht's Remains",
+        4: "Twinmold's Remains",
+        5: "Song of Time",
+        6: "Song of Healing",
+        7: "Epona's Song",
+        8: "Song of Soaring",
+        9: "Song of Storms",
+        10: "Sonata of Awakening",
+        11: "Goron Lullaby",
+        12: "New Wave Bossa Nova",
+        13: "Elegy of Emptiness",
+        14: "Oath to Order",
+        15: "Kokiri/Razor/Guilded Sword",
+        16: "Hylian/Mirror Shield",
+        17: "Magic",
+        18: "Double Defense",
+        19: "Wallet",
+        20: "Woodfall Temple Boss Key",
+        21: "Snowhead Temple Boss Key",
+        22: "Great Bay Temple Boss Key ",
+        23: "Stone Tower Temple Boss Key",
+        24: "Woodfall Temple Small Key",
+        25: "Snowhead Temple Small Keys",
+        26: "Great Bay Temple Small Key",
+        27: "Stone Tower Temple Small Keys",
+        28: "RESET",
+    }
+
+    myTip = Hovertip(button, mask_dict.get(i, ":3"))
     button.image = button_image
     misc_buttons.append(button)
 
@@ -419,35 +553,39 @@ for i, misc_image in enumerate(misc_images):
         button.place(x=x, y=y)
     if i == 20:
         x = 320
-        y = 220
+        y = 200
         button.place(x=x, y=y)
     if i == 21:
         x = 357
-        y = 220
+        y = 200
         button.place(x=x, y=y)
     if i == 22:
         x = 394
-        y = 220
+        y = 200
         button.place(x=x, y=y)
     if i == 23:
         x = 431
-        y = 220
+        y = 200
         button.place(x=x, y=y)
     if i == 24:
         x = 320
-        y = 257
+        y = 237
         button.place(x=x, y=y)
     if i == 25:
         x = 357
-        y = 257
+        y = 237
         button.place(x=x, y=y)
     if i == 26:
         x = 394
-        y = 257
+        y = 237
         button.place(x=x, y=y)
     if i == 27:
         x = 431
-        y = 257
+        y = 237
+        button.place(x=x, y=y)
+    if i == 28:
+        x = 257
+        y = 282
         button.place(x=x, y=y)
     # Bind the toggle_misc function to the button
     button.configure(command=lambda b=button: toggle_misc(b))

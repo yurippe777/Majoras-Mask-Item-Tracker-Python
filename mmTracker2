@@ -32,12 +32,14 @@ for i in range (24):
     filename = os.path.join("ICONS2", f"item_{i+1}bw.png")
     bw_item_image = Image.open(filename).convert("RGBA")
     bw_item_images.append(bw_item_image)
-for i in range (20):
+for i in range (28):
     filename = os.path.join("ICONS3", f"misc_{i+1}.png")
     misc_image = Image.open(filename).convert("RGBA")
     misc_images.append(misc_image)
     misc_names.append(filename)
-for i in range(19):
+for i in range(27):
+    if i == 19:
+        i = i + 1
     filename = os.path.join("ICONS3",f"misc_{i+1}bw.png")
     bw_misc_image = Image.open(filename).convert("RGBA")
     bw_misc_images.append(bw_misc_image)
@@ -197,15 +199,15 @@ def toggle_misc(button):
       #  new_name = current_name
       #  status = "1"
       #  sound_file = "SOUNDS/Select.wav"
-    elif (button_index == 15 or button_index == 16 or button_index == 17 or button_index == 19) and "bw" not in current_name and "x" not in current_name and "y" not in current_name and "z" not in current_name:
+    elif (button_index in [15,16,17,19,25,27]) and "bw" not in current_name and "x" not in current_name and "y" not in current_name and "z" not in current_name:
         new_name = current_name.replace(".png","x.png")
         status = "2"
         sound_file = "SOUNDS/Select.wav"
-    elif (button_index == 15 or button_index == 19) and "x" in current_name:
+    elif (button_index in [15,19,25,27]) and "x" in current_name:
         new_name = current_name.replace("x.png","y.png")
         status = "3"
         sound_file = "SOUNDS/Select.wav"
-    elif (button_index ==19 and "y" in current_name):
+    elif (button_index in [19,27] and "y" in current_name):
         new_name = current_name.replace("y.png","z.png")
         status = "4"
         sound_file = "SOUNDS/Select.wav"
@@ -213,11 +215,15 @@ def toggle_misc(button):
         new_name = current_name.replace("z.png",".png")
         status = "1"
         sound_file = "SOUNDS/Select.wav"
+    elif (button_index ==27 and "z" in current_name):
+        new_name = current_name.replace("z.png","bw.png")
+        status = "0"
+        sound_file = "SOUNDS/Select.wav"
     elif (button_index ==16 or button_index ==17) and "x" in current_name:
         new_name = current_name.replace("x.png","bw.png")
         status = "0"
         sound_file = "SOUNDS/Select.wav"
-    elif (button_index == 15) and "y" in current_name:
+    elif (button_index in [15,25]) and "y" in current_name:
         new_name = current_name.replace("y.png","bw.png")
         status = "0"
         sound_file = "SOUNDS/Select.wav"
@@ -411,21 +417,56 @@ for i, misc_image in enumerate(misc_images):
         x = 440
         y = 128
         button.place(x=x, y=y)
+    if i == 20:
+        x = 320
+        y = 220
+        button.place(x=x, y=y)
+    if i == 21:
+        x = 357
+        y = 220
+        button.place(x=x, y=y)
+    if i == 22:
+        x = 394
+        y = 220
+        button.place(x=x, y=y)
+    if i == 23:
+        x = 431
+        y = 220
+        button.place(x=x, y=y)
+    if i == 24:
+        x = 320
+        y = 257
+        button.place(x=x, y=y)
+    if i == 25:
+        x = 357
+        y = 257
+        button.place(x=x, y=y)
+    if i == 26:
+        x = 394
+        y = 257
+        button.place(x=x, y=y)
+    if i == 27:
+        x = 431
+        y = 257
+        button.place(x=x, y=y)
     # Bind the toggle_misc function to the button
     button.configure(command=lambda b=button: toggle_misc(b))
 
     # Simulate a click on the button to toggle the image if it's black and white
-    if i != 15 and i !=16 and i!= 17 and i!= 19:
+    if i != 15 and i !=16 and i!= 17 and i!= 19 and i!=25:
         if misc_statuses[i] == "0":
             button.invoke()
-    if i == 15 or i ==16 or i ==17 or i ==19:
+    if i == 15 or i ==16 or i ==17 or i ==19 or i==25 or i==27:
         if misc_statuses[i] == "0" and i !=16 and i !=17:
             for _ in range(3):
                 button.invoke()
         if misc_statuses[i] == "0" and (i ==16 or i==17):
             for _ in range(1):
                 button.invoke()
-        if misc_statuses[i] == "1" and (i != 16 and i!=17):
+        if i == 27 and misc_statuses[i] == "0":
+            for _ in range(4):
+                button.invoke()
+        if misc_statuses[i] == "1" and (i != 16 and i!=17 and i!=27):
             for _ in range(4):
                 button.invoke()
         if misc_statuses[i] == "2":

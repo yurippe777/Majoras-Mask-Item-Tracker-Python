@@ -2,6 +2,7 @@ import os
 from PIL import Image, ImageTk
 import tkinter as tk
 import winsound
+from idlelib.tooltip import Hovertip
 # Load the 32x32 mask images
 mask_images = []
 item_images = []
@@ -261,7 +262,37 @@ for i, mask_image in enumerate(mask_images):
         button_image = ImageTk.PhotoImage(bw_mask_images[i])
     else:
         button_image = ImageTk.PhotoImage(mask_image)
-    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555', text = "?")
+    button.pack(pady=30)
+    mask_dict = {
+        0: "Postman's Hat",
+        1: "All-Night Mask",
+        2: "Blast Mask",
+        3: "Stone Mask",
+        4: "Great Fairy's Mask",
+        5: "Deku Mask",
+        6: "Keaton Mask",
+        7: "Bremen Mask",
+        8: "Bunny Hood",
+        9: "Don Gero's Mask",
+        10: "Mask of Scents",
+        11: "Goron Mask",
+        12: "Romani's Mask",
+        13: "Circus Leader's Mask",
+        14: "Kafei's Mask",
+        15: "Couple's Mask",
+        16: "Mask of Truth",
+        17: "Zora Mask",
+        18: "Kamaro's Mask",
+        19: "Gibdo Mask",
+        20: "Garo's Mask",
+        21: "Captain's Hat",
+        22: "Giant's Mask",
+        23: "Fierce Deity's Mask",
+    }
+
+    myTip = Hovertip(button, mask_dict.get(i, ":3"))
+
     button.image = button_image
     mask_buttons.append(button)
 
@@ -289,7 +320,8 @@ for i, item_image in enumerate(item_images):
         button_image = ImageTk.PhotoImage(bw_item_images[i])
     else:
         button_image = ImageTk.PhotoImage(item_image)
-    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555', text = "?")
+    button.pack(pady=30)
     button.image = button_image
     item_buttons.append(button)
 
@@ -318,6 +350,34 @@ for i, item_image in enumerate(item_images):
         if item_statuses[i] == "3":
             for _ in range(2):
                 button.invoke()
+    mask_dict = {
+        0: "Ocarina of Time",
+        1: "Hero's Bow" ,
+        2: "Fire Arrow",
+        3: "Ice Arrow",
+        4: "Light Arrow",
+        5: "Moon's Tear",
+        6: "Bomb Bag",
+        7: "Bombchu",
+        8: "Deku Stick",
+        9: "Deku Nut",
+        10: "Magic Bean",
+        11: "Room Key",
+        12: "Powder Keg",
+        13: "Pictograph Box",
+        14: "Lens of Truth",
+        15: "Hookshot",
+        16: "Great Fairy's Sword",
+        17: "Letter to Kafei",
+        18: "Bottle #1",
+        19: "Bottle #2",
+        20: "Bottle #3",
+        21: "Bottle #4",
+        22: "Bottle #5",
+        23: "Bottle #6",
+    }
+
+    myTip = Hovertip(button, mask_dict.get(i, ":3"))
 #########################################################################################################################
 with open("misc_statuses.txt", "r") as f:
     misc_statuses = f.read().splitlines()
@@ -327,7 +387,40 @@ for i, misc_image in enumerate(misc_images):
     #    button_image = ImageTk.PhotoImage(bw_misc_images[i])
     #else:
     button_image = ImageTk.PhotoImage(misc_image)
-    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555')
+    button = tk.Button(pause_screen_frame, image=button_image, bg='#555555', text = "?")
+    button.pack(pady=30)
+    mask_dict = {
+        0: "Bombers' Notebook",
+        1: "Odolwa's Remains" ,
+        2: "Gyorg's Remains",
+        3: "Goht's Remains",
+        4: "Twinmold's Remains",
+        5: "Song of Time",
+        6: "Song of Healing",
+        7: "Epona's Song",
+        8: "Song of Soaring",
+        9: "Song of Storms",
+        10: "Sonata of Awakening",
+        11: "Goron Lullaby",
+        12: "New Wave Bossa Nova",
+        13: "Elegy of Emptiness",
+        14: "Oath to Order",
+        15: "Kokiri/Razor/Guilded Sword",
+        16: "Hylian/Mirror Shield",
+        17: "Magic",
+        18: "Double Defense",
+        19: "Wallet",
+        20: "Woodfall Temple Boss Key",
+        21: "Snowhead Temple Boss Key",
+        22: "Great Bay Temple Boss Key ",
+        23: "Stone Tower Temple Boss Key",
+        24: "Woodfall Temple Small Key",
+        25: "Snowhead Temple Small Keys",
+        26: "Great Bay Temple Small Key",
+        27: "Stone Tower Temple Small Keys",
+    }
+
+    myTip = Hovertip(button, mask_dict.get(i, ":3"))
     button.image = button_image
     misc_buttons.append(button)
 

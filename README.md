@@ -1,4 +1,4 @@
-# Majoras-Mask-Tracker
+# Majoras-Mask-Item-Tracker
 If you would like to see or edit the Python code, see the main.py file.
 
 Tracks items obtainable in Majora's Mask, and includes features such as sounds, saving, a reset button, and tooltips for item names!

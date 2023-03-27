@@ -9,4 +9,6 @@ you will need to edit the main Python file.
 Check Releases for an easy to use .zip file which contains all the necessary dependancies and a .exe for this program.
 
 A visual for the program can be found below.
+
+
 ![](https://github.com/yurippe777/Majoras-Mask-Tracker/blob/main/Item_Tracker_GIF.gif)
